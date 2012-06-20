@@ -52,7 +52,6 @@ require(['jquery', 'sakai/sakai.api.core',
         var $layoutURL = $('#exhibit_layout_url', $rootel);
         var $topPanels = $('#top_panel_table', $rootel);
 
-
         ///////////////////////
         // Utility functions //
         ///////////////////////
@@ -109,8 +108,6 @@ require(['jquery', 'sakai/sakai.api.core',
             if(!existingFile){
                 sakai.api.Util.include.insertTag("link", atributes);
             }
-            $.getScript('http://api.simile-widgets.org/exhibit/3.0.0rc1/extensions/time/time-extension.js');
-            $.getScript('http://api.simile-widgets.org/exhibit/3.0.0rc1/exhibit-api.js');
             $mainContainer.show();
         }
 

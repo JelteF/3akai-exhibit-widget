@@ -46,6 +46,10 @@
     vertical-align: top;
 }
 
+.exhibit-toolboxWidget-popup {
+    z-index: 800 !important;
+}
+
 .exhibit_widget img, .exhibit_widget a img {
     border: none;
 }
