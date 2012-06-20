@@ -1,0 +1,6 @@
+A wigdet displaying a timeline using a json datafile as input.
+It uses the timeline library from timeglider. Which is available under their license: http://timeglider.com/jquery/?p=license.
+It's free to use for non-commercial institutions.
+
+Known Bugs:
+Using multiple widgets causes problems.

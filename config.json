@@ -1,0 +1,27 @@
+{
+    "id":                 "exhibit",
+    "name":               "Exhibit",
+    "description":        "Exhibit Tool",
+    "type":               "contrib",
+    "enabled":            true,
+    "hasSettings":        true,
+    "url":                "/devwidgets/exhibit/exhibit.html",
+//    "img":                "/devwidgets/exhibit/images/exhibit.png",
+    "i18n": {
+        "default": {
+            "bundle":        "/devwidgets/exhibit/bundles/default.properties",
+            "name":           "Exhibit",
+            "description":    "Exhibit Tool"
+        },
+        "nl_NL": {
+            "bundle":        "/devwidgets/exhibit/bundles/nl_NL.properties"
+        }
+    },
+    "personalportal":     false,
+    "sakaidocs":          true,
+    "showinsakaigoodies": true,
+    "groupdashboard":     false,
+    "grouppages":         false,
+    "userdashboard":      false,
+    "userpages":          false
+}

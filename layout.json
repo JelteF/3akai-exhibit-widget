@@ -1,0 +1,20 @@
+{
+    "topPanels" : [
+        {
+            "expression": "discipline",
+            "label": "Discipline"
+        },
+        {
+            "expression": "relationship",
+            "label": "Relationship"
+        },
+        {
+            "expression": "shared",
+            "label": "Shared?"
+        },
+        {
+            "expression": "deceased",
+            "label": "Deceased?"
+        }
+    ]
+}

@@ -1,0 +1,103 @@
+/**
+ * Licensed to the Sakai Foundation (SF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The SF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
+
+/*
+ * Widget Container CSS
+ */
+
+/* padding around all your widget's content */
+.exhibit_widget {
+    padding: 10px 20px;
+    height: 200;
+    width: 200;
+}
+
+/* widget icon (for widgets that may appear on a dashboard)
+   icons are usually around 18 x 18 pixels */
+.exhibit.s3d-widget .s3d-widget-titlebar .widget_title {
+    background: url('/devwidgets/exhibit/images/exhibit_icon.png')
+        18px 18px no-repeat;
+}
+
+/*
+ * Main View CSS
+ */
+
+.exhibit_widget table, .exhibit_widget tr, .exhibit_widget td {
+    font-size: inherit;
+}
+
+.exhibit_widget tr, .exhibit_widget td {
+    vertical-align: top;
+}
+
+.exhibit_widget img, .exhibit_widget a img {
+    border: none;
+}
+
+#exhibit_main {
+    background: white;
+}
+
+.exhibit_widget #top-panels {
+    padding: 0.5em 0.5in;
+    border-top:     1px solid #BCB79E;
+    border-bottom:  1px solid #BCB79E;
+    background: #FBF4D3;
+}
+
+.exhibit_widget .exhibit-tileView-body {
+    list-style: none;
+}
+
+.exhibit_widget .exhibit-collectionView-group-count {
+    display: none;
+}
+
+.exhibit_widget table.exhibit_item {
+    border:     1px solid #ddd;
+    padding:    0.5em;
+    margin:     0.5em 0;
+    display:    block;
+}
+
+.exhibit_widget .name {
+    font-weight: bold;
+    font-size:   120%;
+}
+
+.exhibit_widget .nobelist-thumbnail {
+    float:      left;
+    width:      11em;
+    height:     10em;
+    border:     1px solid #BCB79E;
+    background: #F0FFF0;
+    padding:    1em;
+    margin:     0.5em;
+    text-align: center;
+}
+
+.exhibit_widget .nobelist-timeline-lens {
+    padding:    1em;
+    text-align: center;
+}
+
+/*
+ * Settings View CSS
+ */
+

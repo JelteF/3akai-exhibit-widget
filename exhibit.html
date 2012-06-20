@@ -1,0 +1,89 @@
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/devwidgets/exhibit/css/exhibit.css" />
+
+<div style="display:none">__MSG__IE_PLACEHOLDER__</div>
+
+<!-- WIDGET CONTENT CONTAINER -->
+<div class="exhibit_widget">
+    <!-- MAIN VIEW -->
+    <div id="exhibit_main" style="display:none;">
+
+        <div id="top-panels">
+            <table id="top_panel_table" width="100%"><tr>
+            </tr></table>
+        </div>
+        <div ex:role="viewPanel" style="padding: 1em 0.5in;">
+            <table ex:role="lens" class="exhibit_item" style="display: none;"><tr>
+                <td><img ex:src-content=".imageURL" /></td>
+                <td>
+                    <div ex:content=".label" class="name"></div>
+                    <div>
+                        <span ex:content=".discipline" class="discipline"></span>,
+                        <i ex:content=".nobel-year"></i>
+                    </div>
+                    <div ex:if-exists=".co-winner" class="co-winners">
+                        Co-winners: <span ex:content=".co-winner"></span>
+                    </div>
+                    <div ex:content=".relationship-detail" class="relationship"></div>
+                </td>
+            </tr></table>
+
+            <div ex:role="view"
+                ex:viewClass="Thumbnail"
+                ex:showAll="true"
+                ex:orders=".discipline"
+                ex:possibleOrders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
+                <div ex:role="exhibit-lens" class="nobelist-thumbnail" style="display: none;">
+                    <img ex:src-content=".imageURL" />
+                    <div><span ex:content=".label"></span></div>
+                    <div>
+                        <span ex:content=".discipline" class="discipline"></span>,
+                        <span ex:content=".nobel-year" class="year"></span>
+                    </div>
+                </div>
+            </div>
+            <div ex:role="view"
+                ex:label="Details"
+                ex:viewClass="Tile"
+                ex:showAll="true"
+                ex:orders=".discipline, .nobel-year"
+                ex:possibleOrders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
+            </div>
+            <div ex:role="view"
+                ex:viewClass="Timeline"
+                ex:start=".nobel-year"
+                ex:colorKey=".discipline"
+                ex:caption=".discipline"
+                ex:bubbleWidth="150"
+                ex:bubbleHeight="150">
+                <div ex:role="lens" class="nobelist-timeline-lens" style="display: none;">
+                    <img ex:src-content=".imageURL" />
+                    <div><span ex:content=".label"></span></div>
+                    <div>
+                        <span ex:content=".discipline" class="discipline"></span>,
+                        <span ex:content=".nobel-year" class="year"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SETTINGS VIEW -->
+    <div id="exhibit_settings" style="display:none;">
+        <form id="exhibit_settings_form" action="#">
+            <p>
+                __MSG__DATA_URL__: <input id="exhibit_data_url" name="exhibit_data_url" />
+            </p>
+            <p>
+                __MSG__LAYOUT_URL__: <input id="exhibit_layout_url" name="exhibit_layout_url" />
+            </p>
+            <div class="fl-force-right">
+                <button type="button" class="s3d-button s3d-link-button" id="exhibit_cancel_settings">__MSG__CANCEL__</button>
+                <button type="submit" class="s3d-button s3d-overlay-button">__MSG__SAVE__</button>
+            </div>
+            <hr class="fl-hidden fl-push" />
+        </form>
+    </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script type="text/javascript" src="/devwidgets/exhibit/javascript/exhibit.js"></script>
