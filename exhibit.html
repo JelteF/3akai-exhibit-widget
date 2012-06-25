@@ -9,32 +9,21 @@
     <div id="exhibit_main" style="display:none;">
 
         <div id="top-panels">
-            <table id="top_panel_table" width="100%"><tr>
-            </tr></table>
+            <table id="top_panel_table" width="100%">
+            </table>
         </div>
-        <div ex:role="viewPanel" style="padding: 1em 0.5in;">
-            <table ex:role="lens" class="exhibit_item" style="display: none;"><tr>
-                <td><img ex:src-content=".imageURL" /></td>
-                <td>
-                    <div ex:content=".label" class="name"></div>
-                    <div>
-                        <span ex:content=".discipline" class="discipline"></span>,
-                        <i ex:content=".nobel-year"></i>
-                    </div>
-                    <div ex:if-exists=".co-winner" class="co-winners">
-                        Co-winners: <span ex:content=".co-winner"></span>
-                    </div>
-                    <div ex:content=".relationship-detail" class="relationship"></div>
-                </td>
-            </tr></table>
-
-            <div ex:role="view"
+        <div id=view_holder ex:role="viewPanel" style="padding: 1em 0.5in;">
+            <table id="detailed_view" ex:role="lens" class="exhibit_item" style="display: none;">
+            </table>
+<!--
+            <div id="thumbnail_view"
+                ex:role="view"
                 ex:viewClass="Thumbnail"
                 ex:showAll="true"
                 ex:orders=".discipline"
                 ex:possibleOrders=".label, .last-name, .discipline, .relationship, .shared, .deceased, .nobel-year">
-                <div ex:role="exhibit-lens" class="nobelist-thumbnail" style="display: none;">
-                    <img ex:src-content=".imageURL" />
+                <div ex:role="exhibit-lens" class="exhibit-thumbnail" style="display: none;">
+                  <img ex:src-content=".imageURL" />
                     <div><span ex:content=".label"></span></div>
                     <div>
                         <span ex:content=".discipline" class="discipline"></span>,
@@ -42,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div ex:role="view"
+   -->         <div ex:role="view"
                 ex:label="Details"
                 ex:viewClass="Tile"
                 ex:showAll="true"
@@ -56,7 +45,7 @@
                 ex:caption=".discipline"
                 ex:bubbleWidth="150"
                 ex:bubbleHeight="150">
-                <div ex:role="lens" class="nobelist-timeline-lens" style="display: none;">
+                <div ex:role="lens" class="exhibit-timeline-lens" style="display: none;">
                     <img ex:src-content=".imageURL" />
                     <div><span ex:content=".label"></span></div>
                     <div>

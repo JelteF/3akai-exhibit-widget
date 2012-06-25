@@ -52,7 +52,8 @@ require(['jquery', 'sakai/sakai.api.core',
         var $layoutURL = $('#exhibit_layout_url', $rootel);
         var $topPanels = $('#top_panel_table', $rootel);
         var $detailedView = $('#detailed_view', $rootel);
-        var $viewHolder = $('#view_holder', $rootel);
+        var $thumbnailView = $('#thumbnail_view', $rootel);
+
 
         ///////////////////////
         // Utility functions //
@@ -113,15 +114,10 @@ require(['jquery', 'sakai/sakai.api.core',
             $mainContainer.show();
         }
 
-
-
         var parseLayout = function(json){
             //create top panels
             var topPanelString = '<tr>';
             var detailedViewString = '<tr>';
-            var thumbnailViewString = '<div id="thumbnail_view" ex:role="view"'+
-                'ex:viewClass="Thumbnail" ex:showAll="true"';
-
             for (var i = 0; i < json.topPanels.length; i++){
                 topPanelString += '<td><div ex:role="facet" ex:expression=".' +
                     json.topPanels[i].expression + '" ex:facetLabel="' +
@@ -129,42 +125,27 @@ require(['jquery', 'sakai/sakai.api.core',
             }
             topPanelString += '</tr>';
             $topPanels.html(topPanelString);
-
+/*
             //create detailed view
-            for (var i = 0; i < json.detailedView.length; i++){
+            for (var i = 0; i < json.detailedView; i++){
                 detailedViewString += '<td>' +
                     getCellContent(json.detailedView[i]) + '</td>';
             }
             detailedViewString += '</tr>';
-            $detailedView.html(detailedViewString);
-
-            //create thumbnail view
-            thumbnailViewString += 'ex:orders=".' + json.thumbnailView.stdOrder +
-                '" ex:possibleOrders=".' + json.thumbnailView.orders[0];
-            for(var i = 1; i < json.thumbnailView.orders; i++){
-                thumbnailViewString += ', .' + json.thumbnailView.orders[i];
-            }
-            thumbnailViewString += '"><div ex:role="exhibit-lens" class="' +
-                'exhibit-thumbnail" style="display: none;">'
-            for(var i = 0; i < json.thumbnailView.cell.length; i++){
-                thumbnailViewString += getCellContent(json.thumbnailView.cell[i]);
-            }
-            thumbnailViewString += '</div></div>';
-            $viewHolder.append(thumbnailViewString);
+            $detailedView.append(detailedViewString);
+            */
         }
 
-
-
         var getCellContent = function (item){
-            var pre = item.prepend != undefined ? item.prepend : '';
-            var app = item.append != undefined ? item.append : '';
+            var pre = item.prepend;
+            var app = item.append;
             if (item.type == 'img'){
                 return pre + '<img ex:src-content=".' + item.src + '" />' + app;
             }
 
-            if (item.type == 'head'){
-                return pre + '<div ex:content=".' + item.name +
-                    '" class="head"></div>' + app;
+            if (item.type == 'name'){
+                return pre + '<div ex:content=".' + item.txt +
+                    '" class="name"></div>' + app;
             }
 
             if (item.type == 'group'){
@@ -176,16 +157,13 @@ require(['jquery', 'sakai/sakai.api.core',
             }
 
             if (item.type == 'i'){
-                return pre + '<i ex:content=".' + item.name + '"></i>' + app;
+                return pre + '<i ex:content=".' + item.txt + '"></i>' + app;
             }
 
             if (item.type == 'if-exists'){
-                return '<div ex:if-exists=".' + item.name + '" class="' +
-                    item.name + '">' + getCellContent(item.yes) + '</div>';
+                return '<div ex:if-exists=".' + item.txt + '" class="' +
+                    item.txt + '">' + getCellContent(item.yes) + '</div>';
             }
-
-            return pre + '<' + item.type + ' ex:content=".' + item.name +
-                '" class="' + item.name + '"></' + item.type + '>' + app;
         }
 /*
         var parseDetailedView(index, value){
