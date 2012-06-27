@@ -17,51 +17,67 @@
             "label": "Deceased?"
         }
     ],
-    "detailedView": [
-        {
-            "type": "img",
-            "src": "imageURL"
-        },
-        {
-            "type": "group",
-            "content": [
-                {
-                    "type": "head",
-                    "name": "label"
-                },
-                {
-                    "type": "group",
-                    "content" : [
-                        {
-                            "type": "span",
-                            "name": "discipline"
-                        },
-                        {
-                            "type": "i",
-                            "name": "nobel-year"
+    "detailedView":{
+        "stdOrder": [
+            "discipline",
+            "nobel-year"
+        ],
+        "orders": [
+            "label",
+            "last-name",
+            "discipline",
+            "relationship",
+            "shared",
+            "deceased",
+            "nobel-year"
+        ],
+        "cell": [
+            {
+                "type": "img",
+                "src": "imageURL"
+            },
+            {
+                "type": "group",
+                "content": [
+                    {
+                        "type": "head",
+                        "name": "label"
+                    },
+                    {
+                        "type": "group",
+                        "content" : [
+                            {
+                                "type": "span",
+                                "name": "discipline",
+                                "append": ", "
+                            },
+                            {
+                                "type": "i",
+                                "name": "nobel-year"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "if-exists",
+                        "name": "co-winner",
+                        "yes": {
+                                "type": "span",
+                                "name": "co-winner",
+                                "prepend": "Co-winners:"
                         }
-                    ]
-                },
-                {
-                    "type": "if-exists",
-                    "name": "co-winner",
-                    "yes": {
-                            "type": "span",
-                            "name": "co-winner",
-                            "prepend": "Co-winners:"
+                    },
+                    {
+                        "type": "div",
+                        "name": "relationship-detail"
                     }
-                },
-                {
-                    "type": "div",
-                    "name": "relationship-detail"
-                }
 
 
-            ]
-        }
-    ],
+                ]
+            }
+        ]
+    },
     "thumbnailView": {
-        "stdOrder": "discipline",
+        "stdOrder": ["discipline"],
         "orders": [
             "label",
             "last-name",
@@ -90,7 +106,8 @@
                 "content": [
                     {
                         "type": "span",
-                        "name": "discipline"
+                        "name": "discipline",
+                        "append": ", "
                     },
                     {
                         "type": "span",

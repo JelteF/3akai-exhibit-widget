@@ -120,7 +120,9 @@ require(['jquery', 'sakai/sakai.api.core',
             var topPanelString = '<tr>';
             var detailedViewString = '<tr>';
             var thumbnailViewString = '<div id="thumbnail_view" ex:role="view"'+
-                'ex:viewClass="Thumbnail" ex:showAll="true"';
+                ' ex:viewClass="Thumbnail" ex:showAll="true"';
+            var detailedSortString = '<div ex:role="view" ex:label="Details" ' +
+                'ex:viewClass="Tile" ex:showAll="true"';
 
             for (var i = 0; i < json.topPanels.length; i++){
                 topPanelString += '<td><div ex:role="facet" ex:expression=".' +
@@ -130,18 +132,16 @@ require(['jquery', 'sakai/sakai.api.core',
             topPanelString += '</tr>';
             $topPanels.html(topPanelString);
 
-            //create detailed view
-            for (var i = 0; i < json.detailedView.length; i++){
-                detailedViewString += '<td>' +
-                    getCellContent(json.detailedView[i]) + '</td>';
-            }
-            detailedViewString += '</tr>';
-            $detailedView.html(detailedViewString);
-
             //create thumbnail view
-            thumbnailViewString += 'ex:orders=".' + json.thumbnailView.stdOrder +
-                '" ex:possibleOrders=".' + json.thumbnailView.orders[0];
-            for(var i = 1; i < json.thumbnailView.orders; i++){
+            thumbnailViewString += 'ex:orders=".' +
+                json.thumbnailView.stdOrder[0];
+            for(var i = 1; i < json.thumbnailView.stdOrder.length; i++){
+                thumbnailViewString += ', .' + json.thumbnailView.stdOrders[i];
+            }
+
+            thumbnailViewString += '" ex:possibleOrders=".' +
+                json.thumbnailView.orders[0];
+            for(var i = 1; i < json.thumbnailView.orders.length; i++){
                 thumbnailViewString += ', .' + json.thumbnailView.orders[i];
             }
             thumbnailViewString += '"><div ex:role="exhibit-lens" class="' +
@@ -151,6 +151,31 @@ require(['jquery', 'sakai/sakai.api.core',
             }
             thumbnailViewString += '</div></div>';
             $viewHolder.append(thumbnailViewString);
+
+            //create detailed view
+            detailedSortString += 'ex:orders=".' +
+                json.detailedView.stdOrder[0];
+            for(var i = 1; i < json.detailedView.stdOrder.length; i++){
+                detailedSortString += ', .' + json.detailedView.stdOrder[i];
+            }
+            detailedSortString += '" ex:possibleOrders=".' +
+                json.detailedView.orders[0];
+            for(var i = 1; i < json.detailedView.orders.length; i++){
+                detailedSortString += ', .' + json.detailedView.orders[i];
+            }
+            detailedSortString += '"></div>';
+            console.log(detailedSortString);
+            $viewHolder.append(detailedSortString);
+
+
+
+            for (var i = 0; i < json.detailedView.cell.length; i++){
+                detailedViewString += '<td>' +
+                    getCellContent(json.detailedView.cell[i]) + '</td>';
+            }
+            detailedViewString += '</tr>';
+            $detailedView.html(detailedViewString);
+
         }
 
 
