@@ -6,7 +6,7 @@
     "enabled":            true,
     "hasSettings":        true,
     "url":                "/devwidgets/exhibit/exhibit.html",
-//    "img":                "/devwidgets/exhibit/images/exhibit.png",
+    "img":                "/devwidgets/exhibit/images/exhibit.png",
     "i18n": {
         "default": {
             "bundle":        "/devwidgets/exhibit/bundles/default.properties",
