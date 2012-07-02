@@ -282,7 +282,7 @@ require(['jquery', 'sakai/sakai.api.core',
         });
 
         $cancelSettings.on('click', function() {
-            sakai.api.Widgets.Container.informFinish(tuid, 'exhibit');
+            sakai.api.Widgets.Container.informCancel(tuid, 'exhibit');
         });
 
 
