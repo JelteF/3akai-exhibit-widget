@@ -48,8 +48,11 @@ require(['jquery', 'sakai/sakai.api.core',
         var $settingsContainer = $('#exhibit_settings', $rootel);
         var $settingsForm = $('#exhibit_settings_form', $rootel);
         var $cancelSettings = $('#exhibit_cancel_settings', $rootel);
+        var $gDocsRB = $('#exhibit_choose_gdocs', $rootel);
+        var $jsonRB = $('#exhibit_choose_json', $rootel);
         var $dataURL = $('#exhibit_data_url', $rootel);
         var $layoutURL = $('#exhibit_layout_url', $rootel);
+        var $layoutUrlContainer = $('#exhibit_layout_url_container', $rootel);
         var $topPanels = $('#top_panel_table', $rootel);
         var $detailedView = $('#detailed_view', $rootel);
         var $viewHolder = $('#view_holder', $rootel);
@@ -83,10 +86,11 @@ require(['jquery', 'sakai/sakai.api.core',
             sakai.api.Widgets.loadWidgetData(tuid, function(success, data) {
                 if (success) {
                     // fetching the data succeeded, send it to the callback function
-                    callback(checkData(data.dataURL), checkLayout(data.layoutURL));
+                    callback(checkData(data.dataURL), checkLayout(data.layoutURL),
+                        data.gDocsRB);
                 } else {
                     // fetching the data failed, we use the DEFAULT_COLOR
-                    callback(DEFAULT_DATA_URL, DEFAULT_LAYOUT_URL);
+                    callback(DEFAULT_DATA_URL, DEFAULT_LAYOUT_URL, false);
                 }
             });
         };
@@ -101,11 +105,15 @@ require(['jquery', 'sakai/sakai.api.core',
          * @param {String} dataURL The URL of the JSON file
          */
 
-        var showMainView = function(dataURL, layoutURL){
+        var showMainView = function(dataURL, layoutURL, gDocsRB){
             var atributes = {"href" : dataURL, "type" : "application/json",
                 "rel" : "exhibit-data"};
             var existingFile = sakai.api.Util.include.checkForTag("link", atributes);
-            $.getJSON(layoutURL, parseLayout);
+            if (gDocsRB){
+                convertDocsToJSON(dataURL)
+            } else {
+                $.getJSON(layoutURL, parseLayout);
+            }
             //If it is already added don't add it again
             if(!existingFile){
                 sakai.api.Util.include.insertTag("link", atributes);
@@ -212,36 +220,7 @@ require(['jquery', 'sakai/sakai.api.core',
             return pre + '<' + item.type + ' ex:content=".' + item.name +
                 '" class="' + item.name + '"></' + item.type + '>' + app;
         }
-/*
-        var parseDetailedView(index, value){
-            $detailedView.append('<td>');
-            $.each(value.content, getCellContent
-            if (value.type ==  "img"){
-                $detailedView.append('<img ex:src-content=".' + value.src +
-                    '" />');
-                return;
-            }
 
-            if (value.type == "name"){
-                $detailedView.append('<div ex:content=".' + value.txt +
-                    '" class="name"></div>');
-                return;
-            }
-
-            if (value.type == "group"){
-                $detailedView.append(value.pre + '<div>');
-                $.each(value.content, parseDetailedView);
-                $detailedView.append('</div>');
-                return;
-            }
-
-            if (value.type == "i"){
-                $detailedView.append(value.pre + '<i ex:content=".' +
-                value.txt + '"></i>');
-                return;
-            }
-        }
-*/
 
         /////////////////////////////
         // Settings View functions //
@@ -252,9 +231,16 @@ require(['jquery', 'sakai/sakai.api.core',
          *
          * @param {String} dataURL The profile or query string
          */
-        var renderSettings = function(dataURL, layoutURL) {
+        var renderSettings = function(dataURL, layoutURL, gDocsRB) {
             $dataURL.val(checkData(dataURL));
             $layoutURL.val(checkLayout(layoutURL));
+            if (gDocsRB){
+                $jsonRB.removeAttr('checked');
+                $gDocsRB.prop('checked', true);
+            } else {
+                $gDocsRB.removeAttr('checked');
+                $jsonRB.prop('checked', true);
+            }
         };
 
 
@@ -266,10 +252,12 @@ require(['jquery', 'sakai/sakai.api.core',
             // get the selected input
             var dataURL = $dataURL.val();
             var layoutURL = $layoutURL.val();
+            var gDocsRB = $gDocsRB.is(':checked');
             // save the selected input
             sakai.api.Widgets.saveWidgetData(tuid, {
                 dataURL: dataURL,
-                layoutURL: layoutURL
+                layoutURL: layoutURL,
+                gDocsRB: gDocsRB
             },
                 function(success, data) {
                     if (success) {
@@ -283,6 +271,14 @@ require(['jquery', 'sakai/sakai.api.core',
 
         $cancelSettings.on('click', function() {
             sakai.api.Widgets.Container.informCancel(tuid, 'exhibit');
+        });
+
+        $gDocsRB.on('click', function() {
+           $layoutUrlContainer.hide();
+        });
+
+        $jsonRB.on('click', function() {
+            $layoutUrlContainer.show();
         });
 
 
