@@ -18,8 +18,8 @@
 
 // load the master sakai object to access all Sakai OAE API methods
 require(['jquery', 'sakai/sakai.api.core',
-        'http://api.simile-widgets.org/exhibit/3.0.0rc1/extensions/time/time-extension.js',
-        'http://api.simile-widgets.org/exhibit/3.0.0rc1/exhibit-api.js'
+//        'http://api.simile-widgets.org/exhibit/3.0.0rc1/exhibit-api.js'
+        '/devwidgets/exhibit/scripted/src/exhibit-api.js'
         ], function($, sakai) {
     /**
      * @name sakai.exhibit
@@ -172,7 +172,6 @@ require(['jquery', 'sakai/sakai.api.core',
                 detailedSortString += ', .' + json.detailedView.orders[i];
             }
             detailedSortString += '"></div>';
-            console.log(detailedSortString);
             $viewHolder.append(detailedSortString);
 
 
