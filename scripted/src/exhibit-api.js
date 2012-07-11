@@ -254,7 +254,7 @@ Exhibit.parseURLParameters = function(url, to, types) {
         name = decode(param.slice(0, eq));
         old = parsed[name];
         replacement = decode(param.slice(eq+1));
- 
+
         if (typeof old === "undefined") {
             old = [];
         } else if (!(old instanceof Array)) {
@@ -332,7 +332,7 @@ Exhibit.includeCssFile = function(doc, url) {
                 // fall through
         }
     }
-        
+
     link = doc.createElement("link");
     link.setAttribute("rel", "stylesheet");
     link.setAttribute("type", "text/css");
@@ -376,7 +376,7 @@ Exhibit.generateDelayID = function() {
 
 /**
  * Load all scripts associated with Exhibit.
- * 
+ *
  * @static
  */
 Exhibit.load = function() {
@@ -428,12 +428,12 @@ Exhibit.load = function() {
             Exhibit.babelPrefix = link.href.replace(/\/translator\/$/, "");
         }
     }
-
+/*
     if (Exhibit.params.bundle) {
         Exhibit.scripts = ["exhibit-scripted-bundle.js"];
         Exhibit.styles = ["exhibit-scripted-bundle.css"];
     }
-    
+*/
     if (typeof Exhibit.params.backstage !== "undefined") {
         // If using Backstage, force non-auto creation and force Backstage
         // to load after Exhibit.  If the Backstage install also includes
