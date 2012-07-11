@@ -1,120 +1,77 @@
 {
-    "topPanels" : [
-        {
-            "expression": "discipline",
-            "label": "Discipline"
-        },
-        {
-            "expression": "relationship",
-            "label": "Relationship"
-        },
-        {
-            "expression": "shared",
-            "label": "Shared?"
-        },
-        {
-            "expression": "deceased",
-            "label": "Deceased?"
-        }
-    ],
-    "detailedView":{
-        "stdOrder": [
-            "discipline",
-            "nobel-year"
-        ],
-        "orders": [
-            "label",
-            "last-name",
-            "discipline",
-            "relationship",
-            "shared",
-            "deceased",
-            "nobel-year"
-        ],
-        "cell": [
-            {
-                "type": "img",
-                "src": "imageURL"
-            },
-            {
+    "topPanels": [{
+        "expression": "discipline",
+        "label": "Discipline"
+    }, {
+        "expression": "relationship",
+        "label": "Relationship"
+    }, {
+        "expression": "shared",
+        "label": "Shared?"
+    }, {
+        "expression": "deceased",
+        "label": "Deceased?"
+    }],
+    "detailedView": {
+        "stdOrder": ["discipline", "nobel-year"],
+        "orders": ["label", "last-name", "discipline", "relationship", "shared", "deceased", "nobel-year"],
+        "cell": [{
+            "type": "img",
+            "src": "imageURL"
+        }, {
+            "type": "group",
+            "content": [{
+                "type": "head",
+                "name": "label"
+            }, {
                 "type": "group",
-                "content": [
-                    {
-                        "type": "head",
-                        "name": "label"
-                    },
-                    {
-                        "type": "group",
-                        "content" : [
-                            {
-                                "type": "span",
-                                "name": "discipline",
-                                "append": ", "
-                            },
-                            {
-                                "type": "i",
-                                "name": "nobel-year"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "if-exists",
-                        "name": "co-winner",
-                        "yes": {
-                                "type": "span",
-                                "name": "co-winner",
-                                "prepend": "Co-winners:"
-                        }
-                    },
-                    {
-                        "type": "div",
-                        "name": "relationship-detail"
-                    }
-
-
-                ]
+                "content": [{
+                    "type": "span",
+                    "name": "discipline",
+                    "append": ", "
+                }, {
+                    "type": "i",
+                    "name": "nobel-year"
+                }]
+            }, {
+                "type": "if-exists",
+                "name": "co-winner",
+                "yes": {
+                    "type": "span",
+                    "name": "co-winner",
+                    "prepend": "Co-winners:"
+                }
+            }, {
+                "type": "div",
+                "name": "relationship-detail"
             }
-        ]
+
+
+            ]
+        }]
     },
     "thumbnailView": {
         "stdOrder": ["discipline"],
-        "orders": [
-            "label",
-            "last-name",
-            "discipline",
-            "relationship",
-            "shared",
-            "deceased",
-            "nobel-year"
-        ],
-        "cell": [
-            {
-                "type": "img",
-                "src": "imageURL"
-            },
-            {
-                "type": "group",
-                "content": [
-                    {
-                        "type": "span",
-                        "name": "label"
-                    }
-                ]
-            },
-            {
-                "type": "group",
-                "content": [
-                    {
-                        "type": "span",
-                        "name": "discipline",
-                        "append": ", "
-                    },
-                    {
-                        "type": "span",
-                        "name": "nobel-year"
-                    }
-                ]
-            }
-        ]
+        "orders": ["label", "last-name", "discipline", "relationship", "shared", "deceased", "nobel-year"],
+        "cell": [{
+            "type": "img",
+            "src": "imageURL"
+        }, {
+            "type": "group",
+            "content": [{
+                "type": "span",
+                "name": "label"
+            }]
+        }, {
+            "type": "group",
+            "content": [{
+                "type": "span",
+                "name": "discipline",
+                "append": ", "
+            }, {
+                "type": "span",
+                "name": "nobel-year"
+            }]
+        }]
     }
 }
