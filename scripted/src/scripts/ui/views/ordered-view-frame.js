@@ -8,10 +8,10 @@
  * @constructor
  * @class
  * @param {Exhibit.UIContext} uiContext
- */ 
+ */
 Exhibit.OrderedViewFrame = function(uiContext) {
     this._uiContext = uiContext;
-    
+
     this._orders = null;
     this._possibleOrders = null;
     this._settings = {};
@@ -59,7 +59,7 @@ Exhibit.OrderedViewFrame.prototype.configure = function(configuration) {
 
     Exhibit.SettingsUtilities.collectSettings(
         configuration, Exhibit.OrderedViewFrame._settingSpecs, this._settings);
-        
+
     this._internalValidate();
 };
 
@@ -73,14 +73,14 @@ Exhibit.OrderedViewFrame.prototype.configureFromDOM = function(domConfiguration)
         this._orders = [];
         this._configureOrders(orders);
     }
-    
+
     directions = Exhibit.getAttribute(domConfiguration, "directions", ",");
     if (typeof directions !== "undefined" && directions !== null && directions.length > 0 && this._orders !== null) {
         for (i = 0; i < directions.length && i < this._orders.length; i++) {
             this._orders[i].ascending = (directions[i].toLowerCase() !== "descending");
         }
     }
-    
+
     possibleOrders = Exhibit.getAttribute(domConfiguration, "possibleOrders", ",");
     if (typeof possibleOrders !== "undefined" && possibleOrders !== null && possibleOrders.length > 0) {
         this._possibleOrders = [];
@@ -93,10 +93,10 @@ Exhibit.OrderedViewFrame.prototype.configureFromDOM = function(domConfiguration)
             this._possibleOrders[i].ascending = (possibleDirections[i].toLowerCase() !== "descending");
         }
     }
-    
+
     Exhibit.SettingsUtilities.collectSettingsFromDOM(
         domConfiguration, Exhibit.OrderedViewFrame._settingSpecs, this._settings);
-        
+
     this._internalValidate();
 };
 
@@ -112,7 +112,7 @@ Exhibit.OrderedViewFrame.prototype.dispose = function() {
         this._footerDom.dispose();
         this._footerDom = null;
     }
-    
+
     this._divHeader = null;
     this._divFooter = null;
     this._uiContext = null;
@@ -184,7 +184,7 @@ Exhibit.OrderedViewFrame.prototype._configurePossibleOrders = function(possibleO
         order = possibleOrders[i];
         ascending = true;
         expr = null;
-        
+
         if (typeof order === "string") {
             expr = order;
         } else if (typeof order === "object") {
@@ -226,7 +226,7 @@ Exhibit.OrderedViewFrame.prototype.initializeUI = function() {
     if (this._settings.showHeader) {
         this._headerDom = Exhibit.OrderedViewFrame.createHeaderDom(
             this._uiContext,
-            this._divHeader, 
+            this._divHeader,
             this._settings.showSummary,
             this._settings.showControls,
             function(evt) { self._openSortPopup(evt, -1); },
@@ -237,7 +237,7 @@ Exhibit.OrderedViewFrame.prototype.initializeUI = function() {
     if (this._settings.showFooter) {
         this._footerDom = Exhibit.OrderedViewFrame.createFooterDom(
             this._uiContext,
-            this._divFooter, 
+            this._divFooter,
             function(evt) { self._setShowAll(true); },
             function(evt) { self._setShowAll(false); },
             function(pageIndex) { self._gotoPage(pageIndex); }
@@ -253,16 +253,16 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
     self = this;
     collection = this._uiContext.getCollection();
     database = this._uiContext.getDatabase();
-    
+
     originalSize = collection.countAllItems();
     currentSize = collection.countRestrictedItems();
-    
+
     hasSomeGrouping = false;
     if (currentSize > 0) {
         currentSet = collection.getRestrictedItems();
-        
+
         hasSomeGrouping = this._internalReconstruct(currentSet);
-        
+
         /*
          *  Build sort controls
          */
@@ -273,7 +273,7 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
             label = (typeof property !== "undefined" && property !== null) ?
                 (order.forward ? property.getPluralLabel() : property.getReversePluralLabel()) :
                 (order.forward ? order.property : "reverse of " + order.property);
-                
+
             orderElmts.push(Exhibit.UI.makeActionLink(
                 label,
                 function(evt) {
@@ -285,29 +285,29 @@ Exhibit.OrderedViewFrame.prototype.reconstruct = function() {
         for (i = 0; i < orders.length; i++) {
             buildOrderElmt(orders[i], i);
         }
-        
+
         if (this._settings.showHeader && this._settings.showControls) {
             this._headerDom.setOrders(orderElmts);
             this._headerDom.enableThenByAction(orderElmts.length < this._getPossibleOrders().length);
         }
     }
-    
+
     if (this._settings.showHeader && this._settings.showControls) {
         this._headerDom.groupOptionWidget.setChecked(this._settings.grouped);
     }
 
     if (this._settings.showFooter) {
         this._footerDom.setCounts(
-            currentSize, 
-            this._settings.abbreviatedCount, 
-            this._settings.showAll, 
+            currentSize,
+            this._settings.abbreviatedCount,
+            this._settings.showAll,
             (!(hasSomeGrouping && this._settings.grouped)
              && !this._settings.paginate)
         );
     }
 };
 
-/** 
+/**
  * @param {Exhibit.Set} allItems
  * @returns {Boolean}
  */
@@ -318,7 +318,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     database = this._uiContext.getDatabase();
     orders = this._getOrders();
     itemIndex = 0;
-    
+
     hasSomeGrouping = false;
     createItem = function(itemID) {
         if ((itemIndex >= fromIndex && itemIndex < toIndex) || (hasSomeGrouping && settings.grouped)) {
@@ -335,10 +335,10 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     processLevel = function(items, index) {
         var order, values, valueType, property, keys, grouped, k, key;
         order = orders[index];
-         values = order.forward ? 
-            database.getObjectsUnion(items, order.property) : 
+         values = order.forward ?
+            database.getObjectsUnion(items, order.property) :
             database.getSubjectsUnion(items, order.property);
-        
+
         valueType = "text";
         if (order.forward) {
             property = database.getProperty(order.property);
@@ -346,11 +346,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         } else {
             valueType = "item";
         }
-        
+
         keys = (valueType === "item" || valueType === "text") ?
             processNonNumericLevel(items, index, values, valueType) :
             processNumericLevel(items, index, values, valueType);
-        
+
         grouped = false;
         for (k = 0; k < keys.length; k++) {
             if (keys[k].items.size() > 1) {
@@ -361,14 +361,14 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
         if (grouped) {
             hasSomeGrouping = true;
         }
-        
+
         for (k = 0; k < keys.length; k++) {
             key = keys[k];
             if (key.items.size() > 0) {
                 if (grouped && settings.grouped) {
                     createGroup(key.display, valueType, index);
                 }
-                
+
                 items.removeSet(key.items);
                 if (key.items.size() > 1 && index < orders.length - 1) {
                     processLevel(key.items, index+1);
@@ -377,12 +377,12 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 }
             }
         }
-        
+
         if (items.size() > 0) {
             if (grouped && settings.grouped) {
                 createGroup(Exhibit._("%general.missingSortKey"), valueType, index);
             }
-            
+
             if (items.size() > 1 && index < orders.length - 1) {
                 processLevel(items, index+1);
             } else {
@@ -390,24 +390,24 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             }
         }
     };
-    
+
     processNonNumericLevel = function(items, index, values, valueType) {
         var keys, compareKeys, retrieveItems, order, k, key, vals;
         keys = [];
         order = orders[index];
-        
+
         if (valueType === "item") {
             values.visit(function(itemID) {
                 var label = database.getObject(itemID, "label");
                 label = (typeof label !== "undefined" && label !== null) ? label : itemID;
                 keys.push({ itemID: itemID, display: label });
             });
-            
+
             compareKeys = function(key1, key2) {
                 var c = key1.display.localeCompare(key2.display);
                 return c !== 0 ? c : key1.itemID.localeCompare(key2.itemID);
             };
-            
+
             retrieveItems = order.forward ? function(key) {
                 return database.getSubjects(key.itemID, order.property, null, items);
             } : function(key) {
@@ -417,7 +417,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             values.visit(function(value) {
                 keys.push({ display: value });
             });
-            
+
             compareKeys = function(key1, key2) {
                 return key1.display.localeCompare(key2.display);
             };
@@ -427,11 +427,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 return database.getObjects(key.display, order.property, null, items);
             };
         }
-        
-        keys.sort(function(key1, key2) { 
-            return (order.ascending ? 1 : -1) * compareKeys(key1, key2); 
+
+        keys.sort(function(key1, key2) {
+            return (order.ascending ? 1 : -1) * compareKeys(key1, key2);
         });
-        
+
         for (k = 0; k < keys.length; k++) {
             key = keys[k];
             key.items = retrieveItems(key);
@@ -439,16 +439,16 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 items.removeSet(key.items);
             }
         }
-        
+
         return keys;
     };
-    
+
     processNumericLevel = function(items, index, values, valueType) {
         var keys, keyMap, order, valueParser, key, k, v;
         keys = [];
         keyMap = {};
         order = orders[index];
-        
+
         if (valueType === "number") {
             valueParser = function(value) {
                 if (typeof value === "number") {
@@ -474,7 +474,7 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 }
             };
         }
-        
+
         values.visit(function(value) {
             var sortkey, key;
             sortkey = valueParser(value);
@@ -488,11 +488,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                 key.values.push(value);
             }
         });
-        
-        keys.sort(function(key1, key2) { 
-            return (order.ascending ? 1 : -1) * (key1.sortkey - key2.sortkey); 
+
+        keys.sort(function(key1, key2) {
+            return (order.ascending ? 1 : -1) * (key1.sortkey - key2.sortkey);
         });
-        
+
         for (k = 0; k < keys.length; k++) {
             key = keys[k];
             vals = key.values;
@@ -503,12 +503,12 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
                     database.getObjects(vals[v], order.property, key.items, items);
                 }
             }
-            
+
             if (!settings.showDuplicates) {
                 items.removeSet(key.items);
             }
         }
-        
+
         return keys;
     };
 
@@ -516,11 +516,11 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
     pageCount = Math.ceil(totalCount / settings.pageSize);
     fromIndex = 0;
     toIndex = settings.showAll ? totalCount : Math.min(totalCount, settings.abbreviatedCount);
-    
+
     if (!settings.grouped && settings.paginate && (pageCount > 1 || (pageCount > 0 && settings.alwaysShowPagingControls))) {
         fromIndex = settings.page * settings.pageSize;
         toIndex = Math.min(fromIndex + settings.pageSize, totalCount);
-        
+
         if (settings.showHeader && (settings.pagingControlLocations === "top" || settings.pagingControlLocations === "topbottom")) {
             this._headerDom.renderPageLinks(
                 settings.page,
@@ -543,9 +543,9 @@ Exhibit.OrderedViewFrame.prototype._internalReconstruct = function(allItems) {
             this._footerDom.hidePageLinks();
         }
     }
-    
+
     processLevel(allItems, 0);
-    
+
     return hasSomeGrouping;
 };
 
@@ -572,12 +572,12 @@ Exhibit.OrderedViewFrame.prototype._getPossibleOrders = function() {
     } else {
         possibleOrders = [].concat(this._possibleOrders);
     }
-    
+
     if (possibleOrders.length === 0) {
         possibleOrders.push({
-            property:   "label", 
-            forward:    true, 
-            ascending:  true 
+            property:   "label",
+            forward:    true,
+            ascending:  true
         });
     }
     return possibleOrders;
@@ -592,7 +592,7 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
     var self, database, popupDom, configuredOrders, order, property, propertyLabel, valueType, sortLabels, orders, possibleOrders, possibleOrder, skip, j, existingOrder, appendOrder;
     self = this;
     database = this._uiContext.getDatabase();
-    
+
     popupDom = Exhibit.UI.createPopupMenuDom(evt.target);
 
     /*
@@ -607,31 +607,31 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
         sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
 
         popupDom.appendMenuItem(
-            sortLabels.ascending, 
+            sortLabels.ascending,
             Exhibit.urlPrefix +
                 (order.ascending ? "images/option-check.png" : "images/option.png"),
             order.ascending ?
                 function() {} :
                 function() {
                     self._reSort(
-                        index, 
-                        order.property, 
-                        order.forward, 
+                        index,
+                        order.property,
+                        order.forward,
                         true,
                         false
                     );
                 }
         );
         popupDom.appendMenuItem(
-            sortLabels.descending, 
+            sortLabels.descending,
             Exhibit.urlPrefix +
                 (order.ascending ? "images/option.png" : "images/option-check.png"),
             order.ascending ?
                 function() {
                     self._reSort(
-                        index, 
-                        order.property, 
-                        order.forward, 
+                        index,
+                        order.property,
+                        order.forward,
                         false,
                         false
                     );
@@ -647,7 +647,7 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
             );
         }
     }
-    
+
     /*
      *  The remaining possible orders
      */
@@ -658,51 +658,51 @@ Exhibit.OrderedViewFrame.prototype._openSortPopup = function(evt, index) {
         skip = false;
         for (j = (index < 0) ? configuredOrders.length - 1 : index; j >= 0; j--) {
             existingOrder = configuredOrders[j];
-            if (existingOrder.property === possibleOrder.property && 
+            if (existingOrder.property === possibleOrder.property &&
                 existingOrder.forward === possibleOrder.forward) {
                 skip = true;
                 break;
             }
         }
-        
+
         if (!skip) {
             property = database.getProperty(possibleOrder.property);
             orders.push({
                 property:   possibleOrder.property,
                 forward:    possibleOrder.forward,
                 ascending:  possibleOrder.ascending,
-                label:      possibleOrder.forward ? 
-                                property.getPluralLabel() : 
+                label:      possibleOrder.forward ?
+                                property.getPluralLabel() :
                                 property.getReversePluralLabel()
             });
         }
     }
-    
+
     if (orders.length > 0) {
         if (index >= 0) {
             popupDom.appendSeparator();
         }
-        
+
         orders.sort(function(order1, order2) {
             return order1.label.localeCompare(order2.label);
         });
-        
+
         appendOrder = function(order) {
             popupDom.appendMenuItem(
                 order.label,
                 null,
                 function() {
                     self._reSort(
-                        index, 
-                        order.property, 
-                        order.forward, 
+                        index,
+                        order.property,
+                        order.forward,
                         order.ascending,
                         true
                     );
                 }
             );
         };
-        
+
         for (i = 0; i < orders.length; i++) {
             appendOrder(orders[i]);
         }
@@ -721,13 +721,13 @@ Exhibit.OrderedViewFrame.prototype._reSort = function(index, propertyID, forward
     var newOrders, property, propertyLabel, valueType, sortLabels;
     oldOrders = this._getOrders();
     index = (index < 0) ? oldOrders.length : index;
-    
+
     newOrders = oldOrders.slice(0, index);
     newOrders.push({ property: propertyID, forward: forward, ascending: ascending });
     if (!slice) {
         newOrders = newOrders.concat(oldOrders.slice(index+1));
     }
-    
+
     property = this._uiContext.getDatabase().getProperty(propertyID);
     propertyLabel = forward ? property.getPluralLabel() : property.getReversePluralLabel();
     valueType = forward ? property.getValueType() : "item";
@@ -752,7 +752,7 @@ Exhibit.OrderedViewFrame.prototype._removeOrder = function(index) {
     var oldOrders, newOrders, order, property, propertyLabel, valueType, sortLabels;
     oldOrders = this._getOrders();
     newOrders = oldOrders.slice(0, index).concat(oldOrders.slice(index + 1));
-    
+
     order = oldOrders[index];
     property = this._uiContext.getDatabase().getProperty(order.property);
     propertyLabel = order.forward ?
@@ -762,7 +762,7 @@ Exhibit.OrderedViewFrame.prototype._removeOrder = function(index) {
         property.getValueType() :
         "item";
     sortLabels = Exhibit.ViewUtilities.getSortLabels(valueType);
-    
+
     this.parentHistoryAction(
         this._historyKey,
         this.makeState(newOrders),
@@ -823,7 +823,7 @@ Exhibit.OrderedViewFrame.prototype._toggleShowDuplicates = function() {
 
 /**
  * @param {Number} pageIndex
- */ 
+ */
 Exhibit.OrderedViewFrame.prototype._gotoPage = function(pageIndex) {
     this.parentHistoryAction(
         this._historyKey,
@@ -840,7 +840,7 @@ Exhibit.OrderedViewFrame.headerTemplate =
     '<div class="exhibit-collectionView-header-sortControls" style="display: none;" id="controlsDiv">' +
         '%1$s' + // sorting controls template
         '<span class="exhibit-collectionView-header-groupControl"> &bull; ' +
-            '<a id="groupOption" class="exhibit-action"></a>' + 
+            '<a id="groupOption" class="exhibit-action"></a>' +
         '</span>' +
     '</div>';
 
@@ -871,12 +871,12 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
 
     dom = $.simileDOM("string", headerDiv, template, {});
     $(headerDiv).attr("class", "exhibit-collectionView-header");
-    
+
     if (showSummary) {
         $(dom.collectionSummaryDiv).show();
         dom.collectionSummaryWidget = Exhibit.CollectionSummaryWidget.create(
             {},
-            dom.collectionSummaryDiv, 
+            dom.collectionSummaryDiv,
             uiContext
         );
     }
@@ -898,7 +898,7 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
         dom.setOrders = function(orderElmts) {
             var addDelimter, i;
             $(dom.ordersSpan).empty();
-            
+
             addDelimiter = Exhibit.Formatter.createListDelimiter(dom.ordersSpan, orderElmts.length, uiContext);
             for (i = 0; i < orderElmts.length; i++) {
                 addDelimiter();
@@ -919,11 +919,11 @@ Exhibit.OrderedViewFrame.createHeaderDom = function(
             dom.collectionSummaryWidget.dispose();
             dom.collectionSummaryWidget = null;
         }
-        
+
         dom.groupOptionWidget.dispose();
         dom.groupOptionWidget = null;
     };
-    
+
     return dom;
 };
 
@@ -939,7 +939,7 @@ Exhibit.OrderedViewFrame.footerTemplate = "<div id='showAllSpan'></div>";
  * @param {Function} onDontShowAll
  * @param {Function} gotoPage
  * @returns {Object}
- */ 
+ */
 Exhibit.OrderedViewFrame.createFooterDom = function(
     uiContext,
     footerDiv,
@@ -948,7 +948,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
     gotoPage
 ) {
     var dom;
-    
+
     dom = $.simileDOM(
         "string",
         footerDiv,
@@ -957,7 +957,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
         {}
     );
     $(footerDiv).attr("class", "exhibit-collectionView-footer");
-    
+
     dom.setCounts = function(count, limitCount, showAll, canToggle) {
         $(dom.showAllSpan).empty();
         if (canToggle && count > limitCount) {
@@ -982,7 +982,7 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
         $(dom.bottomPagingDiv).hide();
     };
     dom.dispose = function() {};
-    
+
     return dom;
 };
 
@@ -995,23 +995,23 @@ Exhibit.OrderedViewFrame.createFooterDom = function(
  */
 Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount, pageWindow, gotoPage) {
     var self, renderPageLink, renderPageNumber, renderHTML, pageWindowStart, pageWindowEnd, i;
-    
+
     $(parentElmt).attr("class", "exhibit-collectionView-pagingControls");
     $(parentElmt).empty();
-    
+
     self = this;
     renderPageLink = function(label, index) {
         var elmt, a, handler;
         elmt = $("<span>")
             .attr("class", "exhibit-collectionView-pagingControls-page");
         $(parentElmt).append(elmt);
-        
+
         a = $("<a>")
             .html(label)
-            .attr("href", "#")
+            .attr("href", "javascript:;")
             .attr("title", Exhibit.ViewUtilities.makePagingLinkTooltip(index));
         elmt.append(a);
-        
+
         handler = function(evt) {
             gotoPage(index);
             evt.preventDefault();
@@ -1026,7 +1026,7 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
                 .attr("class",
                       "exhibit-collectionView-pagingControls-currentPage")
                 .html(index + 1);
-            
+
             $(parentElmt).append(elmt);
         } else {
             renderPageLink(index + 1, index);
@@ -1035,42 +1035,42 @@ Exhibit.OrderedViewFrame.renderPageLinks = function(parentElmt, page, pageCount,
     renderHTML = function(html) {
         var elmt = $("<span>")
             .html(html);
-        
+
         $(parentElmt).append(elmt);
     };
-    
+
     if (page > 0) {
         renderPageLink(Exhibit._("%orderedViewFrame.previousPage"), page - 1);
         if (Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
             renderHTML(" ");
         }
     }
-    
+
     pageWindowStart = 0;
     pageWindowEnd = pageCount - 1;
-    
+
     if (page - pageWindow > 1) {
         renderPageNumber(0);
         renderHTML(Exhibit._("%orderedViewFrame.pageWindowEllipses"));
-        
+
         pageWindowStart = page - pageWindow;
     }
     if (page + pageWindow < pageCount - 2) {
         pageWindowEnd = page + pageWindow;
     }
-    
+
     for (i = pageWindowStart; i <= pageWindowEnd; i++) {
         if (i > pageWindowStart && Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
             renderHTML(Exhibit._("%orderedViewFrame.pageSeparator"));
         }
         renderPageNumber(i);
     }
-    
+
     if (pageWindowEnd < pageCount - 1) {
         renderHTML(Exhibit._("%orderedViewFrame.pageWindowEllipses"));
         renderPageNumber(pageCount - 1);
     }
-    
+
     if (page < pageCount - 1) {
         if (Exhibit._("%orderedViewFrame.pageSeparator").length > 0) {
             renderHTML(" ");
@@ -1175,7 +1175,7 @@ Exhibit.OrderedViewFrame.prototype.makeState = function(
     page = (typeof page !== "undefined" && page !== null) ?
         page :
         this._settings.page;
-    
+
     return {
         "orders": orders,
         "showAll": showAll,

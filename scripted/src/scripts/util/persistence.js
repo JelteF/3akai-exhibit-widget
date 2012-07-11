@@ -25,7 +25,7 @@ Exhibit.Persistence = {
  * Given a relative or absolute URL, determine the fragment of the
  * corresponding absolute URL up to its last '/' character (relative URLs
  * are resolved relative to the document location).
- * 
+ *
  * @param {String} url Starting URL to derive a base URL from.
  * @returns {String} The base URL.
  */
@@ -43,7 +43,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
                 url = url2 + url;
             }
         }
-        
+
         i = url.lastIndexOf("/");
         if (i < 0) {
             return "";
@@ -57,7 +57,7 @@ Exhibit.Persistence.getBaseURL = function(url) {
 
 /**
  * Given a relative or absolute URL, return the absolute URL (resolving
- * relative to the document location). 
+ * relative to the document location).
  *
  * @param {String} url The orignal URL to resolve.
  * @returns {String} The resolved URL.
@@ -87,7 +87,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         url = Exhibit.Persistence._urlWithoutQueryAndHash;
     } else {
         url = document.location.href;
-        
+
         hash = url.indexOf("#");
         question = url.indexOf("?");
         if (question >= 0) {
@@ -95,7 +95,7 @@ Exhibit.Persistence.getURLWithoutQueryAndHash = function() {
         } else if (hash >= 0) {
             url = url.substr(0, hash);
         }
-        
+
         Exhibit.Persistence._urlWithoutQueryAndHash = url;
     }
     return url;
@@ -113,12 +113,12 @@ Exhibit.Persistence.getURLWithoutQuery = function() {
         url = Exhibit.Persistence._urlWithoutQuery;
     } else {
         url = document.location.href;
-        
+
         question = url.indexOf("?");
         if (question >= 0) {
             url = url.substr(0, question);
         }
-        
+
         Exhibit.Persistence._urlWithoutQuery = url;
     }
     return url;
@@ -126,7 +126,7 @@ Exhibit.Persistence.getURLWithoutQuery = function() {
 
 /**
  * Return a URL to one item in this Exhibit, encoding it as a hash relative to
- * the URL without query and hash. 
+ * the URL without query and hash.
  *
  * @param {String} itemID The item's database identifier.
  * @returns {String} A URL to Exhibit highlighting the item.

@@ -39,26 +39,26 @@ Exhibit.FacetUtilities.constructFacetFrame = function(forFacet, div, facetLabel,
         { checkImage: Exhibit.UI.createTranslucentImage("images/black-check.png") }
     );
     resizableDivWidget = Exhibit.ResizableDivWidget.create({}, dom.frameDiv, uiContext);
-    
+
     dom.valuesContainer = resizableDivWidget.getContentDiv();
     $(dom.valuesContainer).attr("class", "exhibit-facet-body");
-    
+
     dom.setSelectionCount = function(count) {
         $(this.filterCountSpan).html(count);
         $(this.clearSelectionsDiv).toggle(count > 0);
     };
     $(dom.clearSelectionsDiv).bind("click", onClearAllSelections);
-    
+
     if (collapsible) {
         $(dom.collapseImg).bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         });
-        
+
         if (collapsed) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         }
     }
-    
+
     return dom;
 };
 
@@ -77,7 +77,7 @@ Exhibit.FacetUtilities.toggleCollapse = function(dom, facet) {
         $(dom.collapseImg).attr("src", Exhibit.urlPrefix + "images/collapse.png");
 		// Try to call onUncollapse but don't sweat it if it isn't there.
 		if (typeof facet.onUncollapse === 'function') {
-			facet.onUncollapse();			
+			facet.onUncollapse();
 		}
     }
 };
@@ -105,10 +105,10 @@ Exhibit.FacetUtilities.isCollapsed = function(facet) {
  * @returns {Element}
  */
 Exhibit.FacetUtilities.constructFacetItem = function(
-    label, 
-    count, 
+    label,
+    count,
     color,
-    selected, 
+    selected,
     facetHasSelection,
     onSelect,
     onSelectOnly,
@@ -117,11 +117,11 @@ Exhibit.FacetUtilities.constructFacetItem = function(
     if (Exhibit.params.safe) {
         label = Exhibit.Formatter.encodeAngleBrackets(label);
     }
-    
+
     var dom = $.simileDOM("string",
         "div",
         '<div class="exhibit-facet-value-count">' + count + "</div>" +
-        '<div class="exhibit-facet-value-inner" id="inner">' + 
+        '<div class="exhibit-facet-value-inner" id="inner">' +
             (   '<div class="exhibit-facet-value-checkbox">&#160;' +
                     Exhibit.UI.createTranslucentImageHTML(
                         facetHasSelection ?
@@ -130,7 +130,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
                     ) +
                 "</div>"
             ) +
-            '<a class="exhibit-facet-value-link" href="#" id="link"></a>' +
+            '<a class="exhibit-facet-value-link" href="javascript:;" id="link"></a>' +
         "</div>"
     );
 
@@ -147,7 +147,7 @@ Exhibit.FacetUtilities.constructFacetItem = function(
             $(label).css("color", color);
         }
     }
-    
+
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
         $(dom.inner).children(':first-child').bind("click", onSelect);
@@ -178,7 +178,7 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
         "</div>" +
         '<div id="frameDiv"><div class="exhibit-flowingFacet-body" id="valuesContainer"></div></div>'
     );
-    
+
     dom.setSelectionCount = function(count) {
         // nothing
     };
@@ -187,12 +187,12 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
         $(dom.collapseImg).bind("click", function(evt) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         });
-        
+
         if (collapsed) {
             Exhibit.FacetUtilities.toggleCollapse(dom, forFacet);
         }
     }
-    
+
     return dom;
 };
 
@@ -209,10 +209,10 @@ Exhibit.FacetUtilities.constructFlowingFacetFrame = function(forFacet, div, face
  * @returns {Element}
  */
 Exhibit.FacetUtilities.constructFlowingFacetItem = function(
-    label, 
-    count, 
+    label,
+    count,
     color,
-    selected, 
+    selected,
     facetHasSelection,
     onSelect,
     onSelectOnly,
@@ -221,23 +221,23 @@ Exhibit.FacetUtilities.constructFlowingFacetItem = function(
     if (Exhibit.params.safe) {
         label = Exhibit.Formatter.encodeAngleBrackets(label);
     }
-    
+
     var dom = $.simileDOM("string",
         "div",
         (   '<div class="exhibit-flowingFacet-value-checkbox">' +
                 $.simileBubble("createTranslucentImageHTML",
-                    Exhibit.urlPrefix + 
+                    Exhibit.urlPrefix +
                     (   facetHasSelection ?
                         (selected ? "images/black-check.png" : "images/no-check.png") :
                         "images/no-check-no-border.png"
                     )) +
             "</div>"
         ) +
-        '<a class="exhibit-flowingFacet-value-link" href="#" id="inner"></a>' +
+        '<a class="exhibit-flowingFacet-value-link" href="javascript:;" id="inner"></a>' +
         " " +
         '<span class="exhibit-flowingFacet-value-count">(' + count + ")</span>"
     );
-    
+
     $(dom.elmt).attr("class", selected ? "exhibit-flowingFacet-value exhibit-flowingFacet-value-selected" : "exhibit-flowingFacet-value");
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
@@ -275,10 +275,10 @@ Exhibit.FacetUtilities.constructFlowingFacetItem = function(
  * @returns {Object}
  */
 Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
-    label, 
-    count, 
+    label,
+    count,
     color,
-    selected, 
+    selected,
     hasChildren,
     expanded,
     facetHasSelection,
@@ -290,23 +290,23 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
     if (Exhibit.params.safe) {
         label = Exhibit.Formatter.encodeAngleBrackets(label);
     }
-    
+
     var dom = $.simileDOM("string",
         "div",
         '<div class="exhibit-facet-value-count">' + count + "</div>" +
-        '<div class="exhibit-facet-value-inner" id="inner">' + 
+        '<div class="exhibit-facet-value-inner" id="inner">' +
             (   '<div class="exhibit-facet-value-checkbox">&#160;' +
                 $.simileBubble("createTranslucentImageHTML",
-                        Exhibit.urlPrefix + 
+                        Exhibit.urlPrefix +
                         (   facetHasSelection ?
                             (selected ? "images/black-check.png" : "images/no-check.png") :
                             "images/no-check-no-border.png"
                         )) +
                 "</div>"
             ) +
-            '<a class="exhibit-facet-value-link" href="#" id="link"></a>' +
+            '<a class="exhibit-facet-value-link" href="javascript:;" id="link"></a>' +
             (   hasChildren ?
-                (   '<a class="exhibit-facet-value-children-toggle" href="#" id="toggle">' + 
+                (   '<a class="exhibit-facet-value-children-toggle" href="javascript:;" id="toggle">' +
                     $.simileBubble("createTranslucentImageHTML",
                             Exhibit.urlPrefix + "images/down-arrow.png") +
                     $.simileBubble("createTranslucentImageHTML",
@@ -331,7 +331,7 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
             $(label).css("color", color);
         }
     }
-    
+
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
         $(dom.elmt).children(":first-child").bind("click", onSelect);
@@ -342,11 +342,11 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
             $(dom.toggle).children(":eq(0)").toggle(show);
             $(dom.toggle).children(":eq(1)").toggle(!show);
         };
-        
+
         $(dom.toggle).bind("click", onToggleChildren);
         dom.showChildren(expanded);
     }
-    
+
     return dom;
 };
 
@@ -366,10 +366,10 @@ Exhibit.FacetUtilities.constructHierarchicalFacetItem = function(
  * @returns {Object}
  */
 Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
-    label, 
-    count, 
+    label,
+    count,
     color,
-    selected, 
+    selected,
     hasChildren,
     expanded,
     facetHasSelection,
@@ -381,23 +381,23 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
     if (Exhibit.params.safe) {
         label = Exhibit.Formatter.encodeAngleBrackets(label);
     }
-    
+
     var dom = $.simileDOM("string",
         "div",
         (   '<div class="exhibit-flowingFacet-value-checkbox">' +
             $.simileBubble("createTranslucentImageHTML",
-                    Exhibit.urlPrefix + 
+                    Exhibit.urlPrefix +
                     (   facetHasSelection ?
                         (selected ? "images/black-check.png" : "images/no-check.png") :
                         "images/no-check-no-border.png"
                     )) +
             "</div>"
         ) +
-        '<a class="exhibit-flowingFacet-value-link" href="#" id="inner"></a>' +
+        '<a class="exhibit-flowingFacet-value-link" href="javascript:;" id="inner"></a>' +
         " " +
         '<span class="exhibit-flowingFacet-value-count">(' + count + ")</span>" +
         (   hasChildren ?
-            (   '<a class="exhibit-flowingFacet-value-children-toggle" href="#" id="toggle">' + 
+            (   '<a class="exhibit-flowingFacet-value-children-toggle" href="javascript:;" id="toggle">' +
                 $.simileBubble("createTranslucentImageHTML",
                         Exhibit.urlPrefix + "images/down-arrow.png") +
                 $.simileBubble("createTranslucentImageHTML",
@@ -408,7 +408,7 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
         ) +
         (hasChildren ? '<div class="exhibit-flowingFacet-childrenContainer" id="childrenContainer"></div>' : "")
     );
-    
+
     $(dom.elmt).attr("class", selected ? "exhibit-flowingFacet-value exhibit-flowingFacet-value-selected" : "exhibit-flowingFacet-value");
     if (typeof label === "string") {
         $(dom.elmt).attr("title", label);
@@ -422,7 +422,7 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
             $(label).css("color", color);
         }
     }
-    
+
     $(dom.elmt).bind("click", onSelectOnly);
     if (facetHasSelection) {
         $(dom.elmt).children(":first-child").bind("click", onSelect);
@@ -433,11 +433,11 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
             $(dom.toggle).children(":eq(0)").toggle(show);
             $(dom.toggle).children(":eq(1)").toggle(!show);
         };
-        
+
         $(dom.toggle).bind("click", onToggleChildren);
         dom.showChildren(expanded);
     }
-    
+
     return dom;
 };
 
@@ -456,11 +456,11 @@ Exhibit.FacetUtilities.constructFlowingHierarchicalFacetItem = function(
  */
 Exhibit.FacetUtilities.Cache = function(database, collection, expression) {
     var self = this;
-    
+
     this._database = database;
     this._collection = collection;
     this._expression = expression;
-    
+
     this._onRootItemsChanged = function() {
         if (typeof self._itemToValue !== "undefined") {
             delete self._itemToValue;
@@ -489,7 +489,7 @@ Exhibit.FacetUtilities.Cache.prototype.dispose = function() {
     );
     this._collection = null;
     this._listener = null;
-    
+
     this._itemToValue = null;
     this._valueToItem = null;
     this._missingItems = null;
@@ -504,16 +504,16 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
     var set, valueToItem;
     if (this._expression.isPath()) {
         set = this._expression.getPath().walkBackward(
-            values, 
+            values,
             "item",
-            filter, 
+            filter,
             this._database
         ).getSet();
     } else {
         this._buildMaps();
-        
+
         set = new Exhibit.Set();
-        
+
         valueToItem = this._valueToItem;
         values.visit(function(value) {
             var itemA, i, item;
@@ -538,9 +538,9 @@ Exhibit.FacetUtilities.Cache.prototype.getItemsFromValues = function(values, fil
  */
 Exhibit.FacetUtilities.Cache.prototype.getItemsMissingValue = function(filter, results) {
     this._buildMaps();
-    
+
     results = results || new Exhibit.Set();
-        
+
     var missingItems = this._missingItems;
     filter.visit(function(item) {
         if (typeof missingItems[item] !== "undefined") {
@@ -559,12 +559,12 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
     entries = [];
     database = this._database;
     valueType = "text";
-    
+
     if (this._expression.isPath()) {
         path = this._expression.getPath();
         facetValueResult = path.walkForward(items, "item", database);
         valueType = facetValueResult.valueType;
-        
+
         if (facetValueResult.size > 0) {
             facetValueResult.forEachValue(function(facetValue) {
                 var itemSubcollection = path.evaluateBackward(facetValue, valueType, items, database);
@@ -573,7 +573,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
         }
     } else {
         this._buildMaps();
-        
+
         valueType = this._valueType;
         for (value in this._valueToItem) {
             if (this._valueToItem.hasOwnProperty(value)) {
@@ -584,7 +584,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValueCountsFromItems = function(items)
                         count++;
                     }
                 }
-            
+
                 if (count > 0) {
                     entries.push({ value: value, count: count });
                 }
@@ -605,7 +605,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
         return this._expression.getPath().walkForward(items, "item", database).getSet();
     } else {
         this._buildMaps();
-        
+
         set = new Exhibit.Set();
         itemToValue = this._itemToValue;
         items.visit(function(item) {
@@ -617,7 +617,7 @@ Exhibit.FacetUtilities.Cache.prototype.getValuesFromItems = function(items) {
                 }
             }
         });
-        
+
         return set;
     }
 };
@@ -630,7 +630,7 @@ Exhibit.FacetUtilities.Cache.prototype.countItemsMissingValue = function(items) 
     var count, item;
 
     this._buildMaps();
-    
+
     count = 0;
     for (item in this._missingItems) {
         if (this._missingItems.hasOwnProperty(item)) {
@@ -653,7 +653,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
         valueToItem = {};
         missingItems = {};
         valueType = "text";
-        
+
         insert = function(x, y, map) {
             if (typeof map.x !== "undefined") {
                 map[x].push(y);
@@ -661,10 +661,10 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
                 map[x] = [ y ];
             }
         };
-        
+
         expression = this._expression;
         database = this._database;
-        
+
         this._collection.getAllItems().visit(function(item) {
             var results = expression.evaluateOnItem(item, database);
             if (results.values.size() > 0) {
@@ -677,7 +677,7 @@ Exhibit.FacetUtilities.Cache.prototype._buildMaps = function() {
                 missingItems[item] = true;
             }
         });
-        
+
         this._itemToValue = itemToValue;
         this._valueToItem = valueToItem;
         this._missingItems = missingItems;

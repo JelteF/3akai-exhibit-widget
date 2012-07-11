@@ -55,12 +55,12 @@ Exhibit.UI.create = function(configuration, elmt, uiContext) {
         if (typeof role !== "undefined" && role !== null && role.startsWith("exhibit-")) {
             role = role.substr("exhibit-".length);
         }
-        
+
         if (typeof Exhibit.UI.componentMap[role] !== "undefined") {
             createFunc = Exhibit.UI.componentMap[role].create;
             return createFunc(configuration, elmt, uiContext);
         }
-        
+
         switch (role) {
         case "lens":
         case "edit-lens":
@@ -97,12 +97,12 @@ Exhibit.UI.createFromDOM = function(elmt, uiContext) {
     var role, createFromDOMFunc;
 
     role = Exhibit.getRoleAttribute(elmt);
-    
+
     if (typeof Exhibit.UI.componentMap[role] !== "undefined") {
         createFromDOMFunc = Exhibit.UI.componentMap[role].createFromDOM;
         return createFromDOMFunc(elmt, uiContext);
     }
-    
+
     switch (role) {
     case "lens":
     case "edit-lens":
@@ -138,24 +138,24 @@ Exhibit.UI.generateCreationMethods = function(constructor) {
         var newContext, settings;
         newContext = Exhibit.UIContext.create(configuration, uiContext);
         settings = {};
-        
+
         Exhibit.SettingsUtilities.collectSettings(
-            configuration, 
-            constructor._settingSpecs || {}, 
+            configuration,
+            constructor._settingSpecs || {},
             settings);
-            
+
         return new constructor(elmt, newContext, settings);
     };
     constructor.createFromDOM = function(elmt, uiContext) {
         var newContext, settings;
         newContext = Exhibit.UIContext.createFromDOM(elmt, uiContext);
         settings = {};
-        
+
         Exhibit.SettingsUtilities.collectSettingsFromDOM(
-            elmt, 
+            elmt,
             constructor._settingSpecs || {},
             settings);
-        
+
         return new constructor(elmt, newContext, settings);
     };
 };
@@ -318,14 +318,14 @@ Exhibit.UI._stringToObject = function(name, suffix) {
                 // ignore
             }
         }
-        
+
         try {
             return eval("Exhibit." + name);
         } catch (ex2) {
             // ignore
         }
     }
-    
+
     if (!name.endsWith(suffix)) {
         try {
             return eval(name + suffix);
@@ -333,13 +333,13 @@ Exhibit.UI._stringToObject = function(name, suffix) {
             // ignore
         }
     }
-    
+
     try {
         return eval(name);
     } catch (ex4) {
         // ignore
     }
-    
+
     throw new Error(Exhibit._("%general.error.unknownClass", name));
 };
 
@@ -400,11 +400,11 @@ Exhibit.UI.showBusyIndicator = function() {
     if (Exhibit.UI._busyIndicatorCount > 1) {
         return;
     }
-    
+
     if (Exhibit.UI._busyIndicator === null) {
         Exhibit.UI._busyIndicator = Exhibit.UI.createBusyIndicator();
     }
-    
+
     // @@@ jQuery simplification?
     scrollTop = typeof document.body["scrollTop"] !== "undefined" ?
         document.body.scrollTop :
@@ -414,9 +414,9 @@ Exhibit.UI.showBusyIndicator = function() {
         (typeof document.body["clientHeight"] !== "undefined" ?
             document.body.clientHeight :
             document.body.parentNode.clientHeight);
-        
+
     top = Math.floor(scrollTop + height / 3);
-    
+
     $(Exhibit.UI._busyIndicator).css("top", top + "px");
     $(document.body).append(Exhibit.UI._busyIndicator);
 };
@@ -429,7 +429,7 @@ Exhibit.UI.hideBusyIndicator = function() {
     if (Exhibit.UI._busyIndicatorCount > 0) {
         return;
     }
-    
+
     try {
         Exhibit.UI._busyIndicator.remove();
     } catch(e) {
@@ -460,9 +460,9 @@ Exhibit.UI.makeActionLink = function(text, handler) {
     var a, handler2;
 
     a = $("<a>" + text + "</a>").
-        attr("href", "#").
+        attr("href", "javascript:;").
         addClass("exhibit-action");
-    
+
     handler2 = function(evt) {
         if (typeof $(this).attr("disabled") === "undefined") {
             evt.preventDefault();
@@ -471,7 +471,7 @@ Exhibit.UI.makeActionLink = function(text, handler) {
     };
 
     $(a).bind("click", handler2);
-    
+
     return a;
 };
 
@@ -508,11 +508,11 @@ Exhibit.UI.makeItemSpan = function(itemID, label, uiContext) {
             label = itemID;
         }
     }
-    
+
     a = $("<a>" + label + "</a>").
         attr("href", Exhibit.Persistence.getItemLink(itemID)).
         addClass("exhibit-item");
-        
+
     handler = function(evt) {
         Exhibit.UI.showItemInPopup(itemID, this, uiContext);
         evt.preventDefault();
@@ -541,7 +541,7 @@ Exhibit.UI.makeValueSpan = function(label, valueType) {
             span.text(url);
         } else {
             span.html("<a href=\"" + url + "\" target=\"_blank\">" +
-                      (label.length > 50 ? 
+                      (label.length > 50 ?
                        label.substr(0, 20) + " ... " + label.substr(label.length - 20) :
                        label) +
                       "</a>");
@@ -581,7 +581,7 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
 
     opts = opts || {};
     opts.coords = opts.coords || Exhibit.UI.calculatePopupPosition(elmt);
-    
+
     itemLensDiv = $("<div>");
 
     lensOpts = {
@@ -598,11 +598,11 @@ Exhibit.UI.showItemInPopup = function(itemID, elmt, uiContext, opts) {
     }
 
     uiContext.getLensRegistry().createLens(itemID, itemLensDiv, uiContext, lensOpts);
-    
+
     $.simileBubble("createBubbleForContentAndPoint",
-        itemLensDiv, 
+        itemLensDiv,
         opts.coords.x,
-        opts.coords.y, 
+        opts.coords.y,
         uiContext.getSetting("bubbleWidth")
     );
 };
@@ -634,7 +634,7 @@ Exhibit.UI.createPopupMenuDom = function(element) {
     div = $("<div>").
         addClass("exhibit-menu-popup").
         addClass("exhibit-ui-protection");
-    
+
     /**
      * @ignore
      */
@@ -650,10 +650,10 @@ Exhibit.UI.createPopupMenuDom = function(element) {
                 }
                 evt.preventDefault();
             }
-                
+
             docWidth = $(document.body).width();
             docHeight = $(document.body).height();
-        
+
             coords = $(element).offset();
             this.elmt.css("top", (coords.top + element.scrollHeight) + "px");
             this.elmt.css("right", (docWidth - (coords.left + element.scrollWidth)) + "px");
@@ -666,7 +666,7 @@ Exhibit.UI.createPopupMenuDom = function(element) {
             var self, a, container;
             self = this;
             a = $("<a>").
-                attr("href", "#").
+                attr("href", "javascript:;").
                 addClass("exhibit-menu-item").
                 bind("click", function(evt) {
                     onClick(evt); // elmt, evt, target:being passed a jqevent
@@ -677,14 +677,14 @@ Exhibit.UI.createPopupMenuDom = function(element) {
 
             container = $("<div>");
             a.append(container);
-    
+
             container.append($.simileBubble("createTranslucentImage",
                 (typeof icon !== "undefined" && icon !== null) ?
                     icon :
                     (Exhibit.urlPrefix + "images/blank-16x16.png")));
-                
+
             container.append(document.createTextNode(label));
-            
+
             this.elmt.append(a);
         },
         appendSeparator: function() {
@@ -710,35 +710,35 @@ Exhibit.UI.createBusyIndicator = function() {
             "background": "url(" + urlPrefix + "message-bubble/message-top-left.png) top left no-repeat"
         });
         containerDiv.append(topDiv);
-        
+
         topRightDiv = $("<div>").css({
             "height": "33px",
             "background": "url(" + urlPrefix + "message-bubble/message-top-right.png) top right no-repeat"
         });
         topDiv.append(topRightDiv);
-        
+
         middleDiv = $("<div>").css({
             "padding-left": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-left.png) top left repeat-y"
         });
         containerDiv.append(middleDiv);
-        
+
         middleRightDiv = $("<div>").css({
             "padding-right": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-right.png) top right repeat-y"
         });
         middleDiv.append(middleRightDiv);
-        
+
         contentDiv = $("<div>");
         middleRightDiv.append(contentDiv);
-        
+
         bottomDiv = $("<div>").css({
             "height": "55px",
             "padding-left": "44px",
             "background": "url(" + urlPrefix + "message-bubble/message-bottom-left.png) bottom left no-repeat"
         });
         containerDiv.append(bottomDiv);
-        
+
         bottomRightDiv = $("<div>").css({
             "height": "55px",
             "background": "url(" + urlPrefix + "message-bubble/message-bottom-right.png) bottom right no-repeat"
@@ -751,18 +751,18 @@ Exhibit.UI.createBusyIndicator = function() {
             "background": "white",
             "opacity": 0.9
         });
-        
+
         contentDiv = $("<div>");
         containerDiv.append(contentDiv);
     }
 
     containerDiv.addClass("exhibit-busyIndicator");
     contentDiv.addClass("exhibit-busyIndicator-content");
-    
+
     img = $("<img />").attr("src", urlPrefix + "progress-running.gif");
     contentDiv.append(img);
     contentDiv.append(document.createTextNode(Exhibit._("%general.busyIndicatorMessage")));
-    
+
     return containerDiv;
 };
 
@@ -809,10 +809,10 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
         var lens;
         $(document).trigger("modalSuperseded.exhibit");
         lens = new Exhibit.Lens(itemID, dom.viewContainer, exhibit, configuration);
-        
+
         $(dom.elmt).css("top", (document.body.scrollTop + 100) + "px");
         $(document.body).append(dom.elmt);
-        
+
         $(dom.closeButton).bind("click", function(evt) {
             dom.close();
             evt.preventDefault();
@@ -820,7 +820,7 @@ Exhibit.UI.createFocusDialogBox = function(itemID, exhibit, configuration) {
         });
         $(dom.elmt).trigger("modalOpened.exhibit");
     };
-    
+
     return dom;
 };
 
@@ -868,7 +868,7 @@ Exhibit.UI._clickInElement = function(x, y, elmt) {
  *
  * This scheme assumes a modeless dialog will never produce a modal dialog
  * without also closing down.
- * 
+ *
  * @param {Object} dom An object with pointers into the DOM.
  * @param {Boolean} modal Whether the dialog is modal or not.
  * @param {Element} [dialogParent] The element containing the parent dialog.
@@ -882,7 +882,7 @@ Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
 
     if (!modal) {
         dom._dialogDescendants = [];
-        
+
         clickHandler = function(evt) {
             if (!Exhibit.UI._clickInElement(evt.pageX, evt.pageY, dom.elmt)) {
                 trap = false;
@@ -950,7 +950,7 @@ Exhibit.UI.setupDialog = function(dom, modal, dialogParent) {
         closedHandler = function(evt) {
             dom._superseded--;
         };
-        
+
         supersededHandler = function(evt) {
             dom._superseded++;
             // Will be unbound when element issuing this signal removes

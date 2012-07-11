@@ -132,7 +132,7 @@ Exhibit.Localization.importLocale("en", {
     "%facets.hierarchical.othersLabel": "(outros)",
     "%facets.hierarchical.rootLabel": "(raiz)",
 
-    "%views.unplottableTemplate": "<a class=\"exhibit-action exhibit-views-unplottableCount\" href=\"#\" id=\"unplottableCountLink\">%1$d %2$s</a> out of <span class=\"exhibit-views-totalCount\">%3$d</span> cannot be plotted.",
+    "%views.unplottableTemplate": "<a class=\"exhibit-action exhibit-views-unplottableCount\" href=\"javascript:;\" id=\"unplottableCountLink\">%1$d %2$s</a> out of <span class=\"exhibit-views-totalCount\">%3$d</span> cannot be plotted.",
     "%views.resultLabel": "resultado",
     "%views.resultsLabel": "resultados",
 
@@ -160,7 +160,7 @@ Exhibit.Localization.importLocale("en", {
     "%TabularView.error.configuration": "TabularView: Error processing configuration of tabular view",
 
     "%orderedViewFrame.removeOrderLabel": "Remover essa ordenação",
-    "%orderedViewFrame.sortingControlsTemplate": "sorted by: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"#\" class=\"exhibit-action\" title=\"Further sort the items\">then by...</a>",
+    "%orderedViewFrame.sortingControlsTemplate": "sorted by: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"javascript:;\" class=\"exhibit-action\" title=\"Further sort the items\">then by...</a>",
     "%orderedViewFrame.formatSortActionTitle": "Ordenado por %1$s (%2$s)",
     "%orderedViewFrame.formatRemoveOrderActionTitle": "Remover ordenação por %1$s (%2$s)",
     "%orderedViewFrame.groupedAsSortedOptionLabel": "agrupar como ordenado",

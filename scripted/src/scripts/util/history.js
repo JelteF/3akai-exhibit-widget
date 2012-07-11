@@ -31,7 +31,7 @@ Exhibit.History = {
      * @private
      */
     _originalLocation: "",
-    
+
     /**
      * @private
      */
@@ -193,7 +193,7 @@ Exhibit.History.pushComponentState = function(component, registry, data, subtitl
 
 /**
  * Passes through to History.js History.pushState function.
- * 
+ *
  * @static
  * @param {Object} data
  * @param {String} subtitle
@@ -212,16 +212,16 @@ Exhibit.History.pushState = function(data, subtitle) {
             subtitle !== "") {
             title += " {" + subtitle + "}";
         }
-        
+
         url = Exhibit.History._originalLocation;
-        
+
         History.pushState(data, title, url);
     }
 };
 
 /**
  * Passes through to History.js History.replaceState function.
- * 
+ *
  * @static
  * @param {Object} data
  * @param {String} subtitle
@@ -248,7 +248,7 @@ Exhibit.History.replaceState = function(data, subtitle, url) {
             typeof currentState.url !== "undefined") {
             url = currentState.url;
         }
-        
+
         History.replaceState(data, title, url);
     }
 };
@@ -256,7 +256,7 @@ Exhibit.History.replaceState = function(data, subtitle, url) {
 /**
  * Pushes an empty state into the history state tracker so the next refresh
  * will start from scratch.
- * 
+ *
  * @static
  */
 Exhibit.History.eraseState = function() {

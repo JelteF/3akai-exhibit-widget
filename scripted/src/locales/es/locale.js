@@ -91,7 +91,7 @@ Exhibit.Localization.importLocale("es", {
     "%TabularView.sortColumnAscending": "ordenado acendentemente por %1$s",
     "%TabularView.sortColumnDescending": "ordenado descendentemente por %1$s",
     "%orderedViewFrame.removeOrderLabel": "Eliminar este orden",
-    "%orderedViewFrame.sortingControlsTemplate": "ordenados por: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"#\" class=\"exhibit-action\" title=\"Seguir ordenando elementos\">luego por...</a>",
+    "%orderedViewFrame.sortingControlsTemplate": "ordenados por: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"javascript:;\" class=\"exhibit-action\" title=\"Seguir ordenando elementos\">luego por...</a>",
     "%orderedViewFrame.formatSortActionTitle": "Ordenados por %1$s (%2$s)",
     "%orderedViewFrame.formatRemoveOrderActionTitle": "Eliminar ordenación por %1$s (%2$s)",
     "%orderedViewFrame.groupedAsSortedOptionLabel": "agrupar según orden",

@@ -91,7 +91,7 @@ Exhibit.Localization.importLocale("sv", {
     "%TabularView.sortColumnAscending": "sortera efter stigande %1$s",
     "%TabularView.sortColumnDescending": "sortera efter fallande %1$s",
     "%orderedViewFrame.removeOrderLabel": "Ta bort det här sorteringskriteriet",
-    "%orderedViewFrame.sortingControlsTemplate": "sorterat efter: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"#\" class=\"exhibit-action\" title=\"sortera ytterligare\">then by...</a>",
+    "%orderedViewFrame.sortingControlsTemplate": "sorterat efter: <span id=\"ordersSpan\"></span>; <a id=\"thenSortByAction\" href=\"javascript:;\" class=\"exhibit-action\" title=\"sortera ytterligare\">then by...</a>",
     "%orderedViewFrame.formatSortActionTitle": "Sorterat efter %1$s (%2$s)",
     "%orderedViewFrame.formatRemoveOrderActionTitle": "Ta bort sorteringskriteriet %1$s (%2$s)",
     "%orderedViewFrame.groupedAsSortedOptionLabel": "gruppera som de sorterats",
