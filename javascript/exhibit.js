@@ -18,8 +18,7 @@
 
 // load the master sakai object to access all Sakai OAE API methods
 require(['jquery', 'sakai/sakai.api.core',
-//        'http://api.simile-widgets.org/exhibit/3.0.0rc1/exhibit-api.js'
-        '/devwidgets/exhibit/scripted/src/exhibit-api.js'
+            '/devwidgets/exhibit/scripted/src/exhibit-api.js'
         ], function($, sakai) {
     /**
      * @name sakai.exhibit
@@ -46,10 +45,11 @@ require(['jquery', 'sakai/sakai.api.core',
         var $rootel = $('#' + tuid); //unique container for each widget instance
         var $mainContainer = $('#exhibit_main', $rootel);
         var $settingsContainer = $('#exhibit_settings', $rootel);
-        var $settingsForm = $('#exhibit_settings_form', $rootel);
+        var $settingsForm = $('#exhibit_json_link_form', $rootel);
         var $cancelSettings = $('#exhibit_cancel_settings', $rootel);
-        var $gDocsRB = $('#exhibit_choose_gdocs', $rootel);
-        var $jsonRB = $('#exhibit_choose_json', $rootel);
+        var $gdocsURL = $('#exhibit_gdocs_url', $rootel);
+        var $convertGdocs = $('#exhibit_convert_gdocs', $rootel);
+        var $gdocsTextArea = $('#exhibit_gdocs_textarea');
         var $dataURL = $('#exhibit_data_url', $rootel);
         var $layoutURL = $('#exhibit_layout_url', $rootel);
         var $layoutUrlContainer = $('#exhibit_layout_url_container', $rootel);
@@ -86,13 +86,74 @@ require(['jquery', 'sakai/sakai.api.core',
             sakai.api.Widgets.loadWidgetData(tuid, function(success, data) {
                 if (success) {
                     // fetching the data succeeded, send it to the callback function
-                    callback(checkData(data.dataURL), checkLayout(data.layoutURL),
-                        data.gDocsRB);
+                    callback(checkData(data.dataURL), checkLayout(data.layoutURL));
                 } else {
                     // fetching the data failed, we use the DEFAULT_COLOR
-                    callback(DEFAULT_DATA_URL, DEFAULT_LAYOUT_URL, false);
+                    callback(DEFAULT_DATA_URL, DEFAULT_LAYOUT_URL);
                 }
             });
+        };
+
+        /**
+         * Converts a Google Spreadsheet url to the JSON feed url
+         *
+         */
+
+        var getJsonUrl = function(url) {
+            var keyIndex = url.lastIndexOf('key=') + 4;
+            var key = url.slice(keyIndex);
+            key = key.split('#')[0].split('&')[0];
+            return 'https://spreadsheets.google.com/feeds/cells/' + key +
+                '/od6/public/basic?alt=json';
+        };
+
+        /**
+         * Converts a Google Spreadsheet JSON feed to the JSON format needed for the
+         * exhibit widget
+         *
+         */
+
+        var convertToCorrectJson = function(data) {
+            var newjson = {};
+            var spreadsheet = data.feed.entry;
+            var legend = {};
+
+            var legendRow = gdocsGetRow(spreadsheet[0]);
+
+            newjson.items = [];
+            var tempItem = {};
+            var lastRow = parseInt(legendRow) + 1;
+            for (i = 0; i < spreadsheet.length; i++) {
+                var content = gdocsGetContent(spreadsheet[i]);
+                var col = gdocsGetCol(spreadsheet[i]);
+                var row = gdocsGetRow(spreadsheet[i]);
+                if (row == legendRow) {
+                    legend[col] = content;
+                    continue;
+                }
+                if (lastRow < row) {
+                    lastRow = row;
+                    newjson.items[newjson.items.length] = tempItem;
+                    tempItem = {};
+                }
+                tempItem[legend[col]] = content;
+            }
+            newjson.items[newjson.items.length] = tempItem;
+            $gdocsTextArea.html(JSON.stringify(newjson));
+            $gdocsTextArea.show();
+
+        };
+
+        var gdocsGetContent = function(cell) {
+            return cell.content.$t;
+        };
+
+        var gdocsGetRow = function(cell) {
+            return parseInt(cell.title.$t.replace(/[A-Za-z]/g, ''));
+        };
+
+        var gdocsGetCol = function(cell) {
+            return cell.title.$t.replace(/[0-9]/g, '');
         };
 
         /////////////////////////
@@ -105,21 +166,17 @@ require(['jquery', 'sakai/sakai.api.core',
          * @param {String} dataURL The URL of the JSON file
          */
 
-        var showMainView = function(dataURL, layoutURL, gDocsRB){
+        var showMainView = function(dataURL, layoutURL){
             var atributes = {"href" : dataURL, "type" : "application/json",
                 "rel" : "exhibit-data"};
             var existingFile = sakai.api.Util.include.checkForTag("link", atributes);
-            if (gDocsRB){
-                convertDocsToJSON(dataURL)
-            } else {
-                $.getJSON(layoutURL, parseLayout);
-            }
+            $.getJSON(layoutURL, parseLayout);
             //If it is already added don't add it again
             if(!existingFile){
                 sakai.api.Util.include.insertTag("link", atributes);
             }
             $mainContainer.show();
-        }
+        };
 
 
 
@@ -183,7 +240,7 @@ require(['jquery', 'sakai/sakai.api.core',
             detailedViewString += '</tr>';
             $detailedView.html(detailedViewString);
 
-        }
+        };
 
 
 
@@ -218,7 +275,7 @@ require(['jquery', 'sakai/sakai.api.core',
 
             return pre + '<' + item.type + ' ex:content=".' + item.name +
                 '" class="' + item.name + '"></' + item.type + '>' + app;
-        }
+        };
 
 
         /////////////////////////////
@@ -230,16 +287,9 @@ require(['jquery', 'sakai/sakai.api.core',
          *
          * @param {String} dataURL The profile or query string
          */
-        var renderSettings = function(dataURL, layoutURL, gDocsRB) {
+        var renderSettings = function(dataURL, layoutURL) {
             $dataURL.val(checkData(dataURL));
             $layoutURL.val(checkLayout(layoutURL));
-            if (gDocsRB){
-                $jsonRB.removeAttr('checked');
-                $gDocsRB.prop('checked', true);
-            } else {
-                $gDocsRB.removeAttr('checked');
-                $jsonRB.prop('checked', true);
-            }
         };
 
 
@@ -247,16 +297,19 @@ require(['jquery', 'sakai/sakai.api.core',
         // Event Handlers //
         ////////////////////
 
+        $convertGdocs.on('click', function() {
+            var jsonFeed = getJsonUrl($gdocsURL.val());
+            $.getJSON(jsonFeed, convertToCorrectJson);
+        });
+
         $settingsForm.on('submit', function(ev) {
             // get the selected input
             var dataURL = $dataURL.val();
             var layoutURL = $layoutURL.val();
-            var gDocsRB = $gDocsRB.is(':checked');
             // save the selected input
             sakai.api.Widgets.saveWidgetData(tuid, {
                 dataURL: dataURL,
                 layoutURL: layoutURL,
-                gDocsRB: gDocsRB
             },
                 function(success, data) {
                     if (success) {
@@ -272,13 +325,6 @@ require(['jquery', 'sakai/sakai.api.core',
             sakai.api.Widgets.Container.informCancel(tuid, 'exhibit');
         });
 
-        $gDocsRB.on('click', function() {
-           $layoutUrlContainer.hide();
-        });
-
-        $jsonRB.on('click', function() {
-            $layoutUrlContainer.show();
-        });
 
 
         /////////////////////////////
@@ -299,7 +345,7 @@ require(['jquery', 'sakai/sakai.api.core',
         };
         // run the initialization function when the widget object loads
         doInit();
-    };
+    }
 
     // inform Sakai OAE that this widget has loaded and is ready to run
     sakai.api.Widgets.widgetLoader.informOnLoad('exhibit');

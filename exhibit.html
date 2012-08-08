@@ -18,17 +18,14 @@
     </div>
     <!-- SETTINGS VIEW -->
     <div id="exhibit_settings" style="display:none;">
-        <form id="exhibit_settings_form" action="#">
-            <p>
-            __MSG__FILE_TYPE__<br \>
-            <div id="exhibet_future_feature" style="display:none;">
-                <input type="radio" name="choose_filetype" id="exhibit_choose_gdocs" />__MSG__GOOGLE_DOCS__ <br \>
-            </div>
-            <input type="radio" name="choose_filetype" id="exhibit_choose_json" />__MSG__JSON_FILE__
-            </p>
-
-            <div id="exhibit_gdocs">
-            </div>
+        <h5>__MSG__CONVERT_GDOCS__</h5>
+        <form id="exhibit_gdocs_convert_form" action="#">
+            __MSG__GDOCS_URL__:<input id=exhibit_gdocs_url>
+            <button type="button" class="s3d-button s3d-overlay-button" id="exhibit_convert_gdocs">__MSG__CONVERT__</button>
+        </form>
+        <textarea id="exhibit_gdocs_textarea" style="display:none;"></textarea>
+        <h5>__MSG__LINK_JSON__</h5>
+        <form id="exhibit_json_link_form" action="#">
             <div id"exhibit_json_file">
                 <p>
                     __MSG__DATA_URL__: <input id="exhibit_data_url" name="exhibit_data_url" />
